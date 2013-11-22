@@ -1,0 +1,5 @@
+#FIND_PACKAGE(libudev)
+include (FindPkgConfig)
+pkg_check_modules(LIBUDEV REQUIRED "libudev")
+ADD_EXECUTABLE(udev_list udev.c)
+TARGET_LINK_LIBRARIES(udev_list ${LIBUDEV_LIBRARIES})
