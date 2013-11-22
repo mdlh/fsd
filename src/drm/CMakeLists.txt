@@ -1,0 +1,20 @@
+SET(WDRM_SOURCE_FILES 
+    drm.c
+    drm_connection.c
+)
+
+SET(WDRM_LOCAL_HEADERS 
+    drm_connection.h
+)
+
+SET(WDRM_PUBLIC_HEADERS 
+    ${PUBLIC_HEADERS}/drm_connect.h
+)
+
+SET(WDRM_ALL_FILES
+    ${WDRM_SOURCE_FILES}
+    ${WDRM_LOCAL_HEADERS}
+    ${WDRM_PUBLIC_HEADERS}
+)
+
+ADD_LIBRARY(wdrm STATIC ${WDRM_ALL_FILES})
