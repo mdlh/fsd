@@ -27,6 +27,12 @@ int main (void)
 	udev_enumerate_scan_devices (enumerate);
 	devices = udev_enumerate_get_list_entry (enumerate);
 
+	/* Prepare monitor and subscribe before enumeration */
+	struct udev_monitor * mon;
+	mon = udev_monitor_new_from_netlink (udev, "udev");
+	udev_monitor_filter_add_match_subsystem_devtype (mon, "drm", NULL);
+	udev_monitor_enable_receiving (mon);
+
 	/*
 	 * Iterate over enumeration results
 	 */
@@ -64,6 +70,14 @@ int main (void)
 	}
 
 	udev_enumerate_unref (enumerate);
+
+	while (1) {
+		dev = udev_monitor_receive_device (mon);
+		if ( dev ) {
+			printf ("Node: %s: %s\n", udev_device_get_action (dev), udev_device_get_devnode (dev));
+			udev_device_unref (dev);
+		}
+	}
 	udev_unref (udev);
 	return 0;
 }
