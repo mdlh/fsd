@@ -35,7 +35,6 @@ int main (void)
 		struct udev_list_entry * property;
 
 		sys_path = udev_list_entry_get_name (entry);
-		printf("sys path: %s\n", sys_path);
 
 		dev = udev_device_new_from_syspath (udev, sys_path);
 		node_path = udev_device_get_devnode (dev);
@@ -45,11 +44,21 @@ int main (void)
 		if ( !minor_value
                      || (strlen (minor_value) != 1)
                      || minor_value[0] != '0' ) {
+			struct udev_device * parent = 
+				udev_device_get_parent_with_subsystem_devtype (dev, "drm", NULL);
+			if ( parent ) {
+				const char * connect_name;
+				const char * parent_path;
+				parent_path = udev_device_get_syspath (parent);
+				connect_name = sys_path;
+				connect_name += strlen (parent_path) + 1;
+				printf("Potential connector name: %s\n", connect_name);
+			}
 			udev_device_unref (dev);
 			continue;
 		}
 
-		printf ("Node path: %s\n", node_path);
+		printf ("Dri path: %s\n", node_path);
 
 		udev_device_unref (dev);
 	}
