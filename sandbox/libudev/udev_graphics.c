@@ -35,6 +35,7 @@ int main (void)
 		struct udev_list_entry * property;
 
 		sys_path = udev_list_entry_get_name (entry);
+		printf("sys path: %s\n", sys_path);
 
 		dev = udev_device_new_from_syspath (udev, sys_path);
 		node_path = udev_device_get_devnode (dev);
@@ -44,8 +45,8 @@ int main (void)
 		if ( !minor_value
                      || (strlen (minor_value) != 1)
                      || minor_value[0] != '0' ) {
-			continue;
 			udev_device_unref (dev);
+			continue;
 		}
 
 		printf ("Node path: %s\n", node_path);
