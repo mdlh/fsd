@@ -1,0 +1,10 @@
+include (FindPkgConfig)
+pkg_check_modules(LIBDRM "libdrm")
+
+IF ( ${LIBDRM_FOUND} )
+	INCLUDE_DIRECTORIES (${LIBDRM_INCLUDE_DIRS})
+	ADD_EXECUTABLE (drm_connectors print_drm.c)
+	TARGET_LINK_LIBRARIES (drm_connectors ${LIBDRM_LIBRARIES})
+ELSE ( ${LIBDRM_FOUND} )
+	MESSAGE (WARNING "Libdrm not found")
+ENDIF ( ${LIBDRM_FOUND} )
