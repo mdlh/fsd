@@ -19,6 +19,12 @@ int main (void)
 		exit(1);
 	}
 
+	/* Prepare monitor and subscribe before enumeration */
+	struct udev_monitor * mon;
+	mon = udev_monitor_new_from_netlink (udev, "udev");
+	udev_monitor_filter_add_match_subsystem_devtype (mon, "drm", NULL);
+	udev_monitor_enable_receiving (mon);
+
 	/*
 	 * Prepare enumeration
 	 */
@@ -27,11 +33,6 @@ int main (void)
 	udev_enumerate_scan_devices (enumerate);
 	devices = udev_enumerate_get_list_entry (enumerate);
 
-	/* Prepare monitor and subscribe before enumeration */
-	struct udev_monitor * mon;
-	mon = udev_monitor_new_from_netlink (udev, "udev");
-	udev_monitor_filter_add_match_subsystem_devtype (mon, "drm", NULL);
-	udev_monitor_enable_receiving (mon);
 
 	/*
 	 * Iterate over enumeration results
